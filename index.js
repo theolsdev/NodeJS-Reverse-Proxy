@@ -52,14 +52,11 @@ app.use(function(req,res,next){
 });
 
 //===============PORTS=================
-var httpPort = 80;
-var httpsPort = 443;
+var httpPort = process.env.PORT;
 //===============HTTP=================
 var http_server = require('http').createServer();
 http_server.on('request', require('redirect-https')({ port: httpsPort }));
 http_server.listen(httpPort, function () { console.log(`Listening on port ${httpPort} for redirect to HTTPS.`); });
 //===============HTTPS=================
-var https = require('https'),
-  key = fs.readFileSync(__dirname + '/ssl/key.pem'),
-  cert = fs.readFileSync(__dirname + '/ssl/cert.pem');
-var mainserver = https.createServer({ key: key, cert: cert }, app).listen(httpsPort, function () { console.log('Listening on ' + httpsPort + '!'); });
+
+var mainserver = https.createServer({ key: key, cert: cert }, app).listen(httpPort, function () { console.log('Listening on ' + httpPort + '!'); });
